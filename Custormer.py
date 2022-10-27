@@ -9,6 +9,11 @@ class Customer:
     def premium(first_name: str, last_name: str):
         return Customer(first_name, last_name, ("premium", 10))
     
+# other answer for above code:
+#     @classmethod
+#     def premium(cls, first_name, last_name):
+#         return cls(first_name, last_name, tier=('premium', 10))
+
     @property
     def name(self):
         return f"{self.first_name} {self.last_name}"
