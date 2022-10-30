@@ -14,7 +14,7 @@ def read_airlines(filename='airlines.dat'):
     with open(filename) as f:
         reader = csv.reader(f)
         for line in reader:
-            airlines[line[4]] = line[1]
+            airlines[line[4]] = line[1]  # creating a dict of code names to the full name of airlines
     return airlines
 
 def read_airports(filename='airports.dat'):
@@ -22,7 +22,7 @@ def read_airports(filename='airports.dat'):
     with open(filename) as f:
         reader = csv.reader(f)
         for line in reader:
-            airports[line[4]] = line[1]
+            airports[line[4]] = line[1]  # creating dict of airport code names to actual names
     return airports
 
 def read_routes(filename='routes.dat'):
@@ -31,10 +31,10 @@ def read_routes(filename='routes.dat'):
     with open(filename) as f:
         reader = csv.reader(f)
         for line in reader:
-            source, dest = line[2], line[4]
+            source, dest = line[2], line[4]  # splicing data of what airport can go to certain destination jfk->SEA
             if source not in routes:
-                routes[source] = []
-            routes[source].append(dest)
+                routes[source] = []  # create dict array for source if it doesnt exist in dict as key
+            routes[source].append(dest)  #  append desitnation to values if source is source
     return routes
   
 def find_paths(routes, source, dest, max_segments):
@@ -44,15 +44,15 @@ def find_paths(routes, source, dest, max_segments):
     for steps in range(max_segments):
         next_frontier = set()
         for airport in frontier:
-            for target in routes.get(airport, ()):
+            for target in routes.get(airport, ()):  # add empty parenthesis becuase some flights are only destination
                 if target not in seen:
-                    next_frontier.add(target)
-                    seen[target] = set()
+                    next_frontier.add(target)  # adds target to next node to visit if it is not in seen, which is nodes that are visited
+                    seen[target] = set()  # setting a dict of target and a set of airports it can visit(currently empty)
                 for path in seen[airport]:
-                    if len(path) != steps + 1:
+                    if len(path) != steps + 1:  #  checking to make sure you are not surpassing number of steps
                         continue
-                    seen[target].add(path + (target, ))
-        frontier = next_frontier
+                    seen[target].add(path + (target, ))  # add source path to target
+        frontier = next_frontier  # when all nodes are visited on current layer, move on to next layer
     return seen[dest]
 
 def rename_path(path, airports):
